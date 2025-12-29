@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cashier Panel</title>
+    <link rel="stylesheet" href="cashir.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">Cashier Panel</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <input id="cashierNameInput" type="text" placeholder="Cashier name" value="Cashier #1" style="padding:8px 10px;border-radius:8px;border:1px solid #e6e9ef;min-width:160px" />
+        <!-- summary links removed per request -->
+        <div id="zoomControls" style="display:flex;gap:6px;align-items:center;margin-left:8px">
+          <button class="btn secondary" id="zoomOutBtn" title="Zoom out">−</button>
+          <button class="btn" id="zoomResetBtn" title="Reset zoom">100%</button>
+          <button class="btn secondary" id="zoomInBtn" title="Zoom in">+</button>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">Cashier</div>
+        <nav class="sidebar-nav">
+          <button class="side-btn active" id="navSales">Sales</button>
+        </nav>
+      </aside>
+
+      <main class="page" id="mainContent">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;justify-content:space-between">
+          <div>
+            <div class="section-title">Sales</div>
+            <div style="font-size:13px;color:var(--muted)">Choose Single or Multi-item sale mode</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)"><input type="radio" name="saleMode" id="modeMulti" value="multi" checked/> Multi</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)"><input type="radio" name="saleMode" id="modeSingle" value="single" /> Single</label>
+          </div>
+        </div>
+  <div class="form-row" style="align-items:flex-end;">
+          <div class="field" style="flex:0 0 200px;display:flex;flex-direction:column;gap:8px">
+            <label for="productSelect">Product</label>
+            <select id="productSelect">
+              <option value="Dabo">Dabo (Bread)</option>
+              <option value="DFO">DFO</option>
+              <option value="Cake">Cake / Pastry</option>
+              <option value="Torta">Torta (Large cakes)</option>
+              <option value="Donut">Donut</option>
+              <option value="Cookies">Cookies</option>
+              <option value="BreadCorn">Bread Corn</option>
+              <option value="Baklava">Baklava</option>
+              <option value="KeshKesh">Kesh Kesh</option>
+              <option value="Other">Other / Snacks</option>
+              <option value="Erteb">Erteb</option>
+            </select>
+
+            <label for="price">Price / Variant (Birr)</label>
+            <select id="price"></select>
+          </div>
+          </div>
+
+          <div class="field" style="flex:0 0 120px">
+            <label for="qty">Quantity</label>
+            <input id="qty" type="number" min="1" value="1" />
+          </div>
+
+          <div class="field" style="flex:0 0 160px">
+            <label for="payment">Payment Method</label>
+            <select id="payment">
+              <option>Telebirr</option>
+              <option>Bank</option>
+              <option>Cash</option>
+            </select>
+          </div>
+
+          <div class="field" style="flex:1;min-width:140px">
+            <label>Subtotal</label>
+            <div id="subtotal" style="padding:10px;border-radius:8px;background:#fbfdff;border:1px solid #eee;font-weight:600">10.00 Birr</div>
+          </div>
+        </div>
+
+        <!-- Cart area: added to support multiple items per sale -->
+        <div id="cartArea" style="margin-top:12px;padding:10px;border-radius:8px;border:1px dashed #e9eef8;background:#fbfdff">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:600">Cart</div>
+            <div style="font-size:13px;color:var(--muted)"><span id="cartTotal">0.00 Birr</span></div>
+          </div>
+          <div id="cartList" style="margin-top:8px;min-height:36px;color:var(--muted)">No items in cart</div>
+          <div style="margin-top:8px;text-align:right">
+            <button class="btn secondary" id="clearCartBtn" style="margin-right:8px">Clear Cart</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="addItemBtn">Add Item</button>
+          <button class="btn" id="singleSaleBtn" title="Complete a single-item sale" style="margin-left:8px;display:none">Single Sale</button>
+          <button class="btn" id="completeBtn">Complete Purchase</button>
+          <button class="btn secondary" id="resetBtn" title="Reset form">Reset</button>
+          <label style="display:flex;align-items:center;gap:8px;margin-left:auto;color:var(--muted);font-size:13px">
+            <input id="resetAfterPrint" type="checkbox" /> Reset after print
+          </label>
+          <div id="sessionNotice" style="color:var(--muted);font-size:13px;margin-left:12px;display:none" aria-live="polite">Start the day to enable sales</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div class="section-title">Receipts History</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn" id="prevDateBtn" title="Previous day">◀</button>
+            <input type="date" id="historyDate" style="padding:6px;border-radius:6px;border:1px solid #e6e9ef" />
+            <button class="btn" id="nextDateBtn" title="Next day">▶</button>
+            <button class="btn secondary" id="todayHistoryBtn" title="Jump to today">Today</button>
+          </div>
+        </div>
+        <div id="historyList" style="max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:8px;margin-top:8px"></div>
+        <div style="margin-top:10px;text-align:right"><button class="btn secondary" id="clearHistoryBtn">Clear History</button></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <div class="section-title">End of Day</div>
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <div style="color:var(--muted);font-size:14px">Run an end-of-day summary to see totals by payment method.</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn" id="startDayBtn">Start Today's Sale</button>
+            <button class="btn" id="forceEndBtn" style="margin-left:8px;background:#059669;border-color:transparent">End Day Now</button>
+            <button class="btn secondary" id="startResetBtn" style="margin-left:8px" title="Cancel the started session">Cancel Start</button>
+          </div>
+        </div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px">
+          <span id="dayStatus"></span>
+        </div>
+      </div>
+  </main>
+
+    <!-- Receipt modal -->
+    <div class="overlay" id="overlay" aria-hidden="true">
+      <div class="receipt" role="dialog" aria-modal="true" aria-labelledby="receiptTitle">
+        <h3 id="receiptTitle">Receipt</h3>
+  <div class="line"><span>Items</span><div id="r-items" style="text-align:right"></div></div>
+  <div class="line"><span>Payment</span><span id="r-payment"></span></div>
+  <div class="line"><span>Subtotal</span><span id="r-subtotal"></span></div>
+        <div class="line"><span>Date</span><span id="r-date"></span></div>
+        <div class="line"><span>Cashier</span><span id="r-cashier">-</span></div>
+
+        <div class="footer">
+          <button class="btn secondary" id="downloadBtn">Download</button>
+          <button class="btn" id="printBtn">Print Receipt</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary modal -->
+    <div class="summary-overlay" id="summaryOverlay" aria-hidden="true">
+      <div class="summary-box" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+        <h3 id="summaryTitle">End of Day Summary</h3>
+        <div id="summaryContent">
+          <div class="summary-row"><span>Telebirr — Count</span><span id="sum-tele-count">0</span></div>
+          <div class="summary-row"><span>Telebirr — Revenue</span><span id="sum-tele-rev">0.00 Birr</span></div>
+          <div class="summary-row"><span>Cash — Count</span><span id="sum-cash-count">0</span></div>
+          <div class="summary-row"><span>Cash — Revenue</span><span id="sum-cash-rev">0.00 Birr</span></div>
+          <div class="summary-row"><span>Bank — Count</span><span id="sum-bank-count">0</span></div>
+          <div class="summary-row"><span>Bank — Revenue</span><span id="sum-bank-rev">0.00 Birr</span></div>
+          <div class="summary-row total"><span>Total Items Sold</span><span id="sum-items">0</span></div>
+          <div class="summary-row total"><span>Total Revenue</span><span id="sum-total-rev">0.00 Birr</span></div>
+          <hr style="border:none;border-top:1px dashed #e6eef8;margin:10px 0" />
+          <div style="font-weight:600;margin-top:6px">Receipts (today)</div>
+          <div id="sum-receipts-list" style="max-height:180px;overflow:auto;margin-top:8px;color:var(--muted);font-size:13px">No receipts</div>
+          <div style="font-weight:600;margin-top:8px">Product / Variant breakdown</div>
+          <div id="sum-product-breakdown" style="max-height:220px;overflow:auto;margin-top:8px;color:var(--muted);font-size:13px">No items</div>
+        </div>
+        <div class="summary-actions">
+          <button class="btn secondary" id="downloadSummaryBtn">Download Summary</button>
+          <button class="btn" id="closeSummaryBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notification removed (was blocking UI) -->
+    <!-- Success popup (shown briefly when day ends) -->
+    <div id="successPopup" aria-live="polite" style="display:none;position:fixed;right:18px;top:84px;z-index:200">
+      <div class="success-pill"><span class="check">✓</span> <span id="successMsg">Daily summaries done</span></div>
+    </div>
+
+    <script src="cashir.js"></script>
+  </body>
+</html>

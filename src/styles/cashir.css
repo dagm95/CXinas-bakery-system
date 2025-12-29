@@ -1,0 +1,132 @@
+:root{}
+@import "tailwindcss";
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#2563eb;
+  --shadow: 0 6px 18px rgba(20,20,30,0.08);
+}
+*{box-sizing:border-box;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:#111;}
+
+/* Top bar */
+.topbar{
+  position:fixed;left:0;right:0;top:0;height:64px;background:var(--card);
+  display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  box-shadow: var(--shadow);z-index:50;border-bottom-left-radius:6px;border-bottom-right-radius:6px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .title{
+  font-weight:700;padding:8px 12px;background:#eef2ff;color:#1e293b;border-radius:8px;box-shadow:0 3px 8px rgba(37,99,235,0.08)
+}
+
+.logout-btn{background:transparent;border:1px solid #eee;padding:8px 12px;border-radius:8px;cursor:pointer}
+.logout-btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(37,99,235,0.08)}
+
+/* Page content */
+.page{padding:100px 20px 40px;max-width:980px;margin:0 auto}
+
+.card{background:var(--card);padding:20px;border-radius:12px;box-shadow:var(--shadow);}
+.section-title{font-size:18px;font-weight:600;margin-bottom:12px}
+
+.form-row{display:flex;gap:12px;align-items:center}
+.form-row .field{flex:1;min-width:0}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+select,input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;background:#fff}
+input[type=number]{-moz-appearance:textfield;appearance:none}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+.actions{display:flex;gap:12px;align-items:center;margin-top:16px}
+.btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer}
+.btn.secondary{background:#fff;color:#111;border:1px solid #e6e9ef}
+.btn:hover{opacity:0.95;transform:translateY(-1px)}
+
+/* Zoom control sizing */
+#zoomControls .btn{padding:6px 8px;font-size:14px}
+#zoomControls .btn#zoomResetBtn{min-width:56px}
+/* Receipt modal */
+.overlay{position:fixed;inset:0;background:rgba(10,12,20,0.4);display:none;align-items:center;justify-content:center;z-index:60}
+.receipt{
+  width:360px;max-width:95%;background:var(--card);padding:18px;border-radius:10px;box-shadow:0 20px 40px rgba(12,15,30,0.15);
+  transform:translateY(10px);opacity:0;transition:all 220ms ease-in-out;
+}
+.overlay.show{display:flex}
+.overlay.show .receipt{transform:translateY(0);opacity:1}
+
+.receipt h3{margin:0 0 8px}
+.receipt .line{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eee;font-size:14px}
+.receipt .line:last-child{border-bottom:none}
+
+.receipt .footer{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+
+/* Summary modal (end of day) */
+.summary-overlay{position:fixed;inset:0;background:rgba(10,12,20,0.4);display:none;align-items:center;justify-content:center;z-index:62}
+.summary-overlay.show{display:flex}
+.summary-box{width:460px;max-width:96%;background:var(--card);padding:18px;border-radius:10px;box-shadow:0 30px 60px rgba(12,15,30,0.18);transform:translateY(12px);opacity:0;transition:all 240ms ease-in-out}
+.summary-overlay.show .summary-box{transform:translateY(0);opacity:1}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6}
+.summary-row.total{font-weight:700}
+.summary-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+
+/* Responsive */
+@media (max-width:640px){
+  .form-row{flex-direction:column;align-items:stretch}
+  .topbar{padding:0 12px}
+}
+
+/* Layout: sidebar + main */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:#fff;border-right:1px solid #f1f5f9;padding:18px;box-shadow:var(--shadow);position:fixed;left:12px;top:84px;border-radius:8px}
+.sidebar-brand{font-weight:700;margin-bottom:12px}
+.sidebar-nav{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.side-btn{background:transparent;border:1px solid transparent;padding:8px 10px;border-radius:8px;text-align:left;cursor:pointer}
+.side-btn.active{background:#eef2ff;border-color:#e0e7ff}
+.sidebar-list{margin-top:12px;font-size:13px;color:var(--muted);max-height:60vh;overflow:auto}
+.side-small-btn{background:transparent;border:1px solid #e6e9ef;padding:4px 8px;border-radius:6px;margin-left:8px;cursor:pointer;font-size:12px}
+.side-small-btn:hover{background:#f8fafc}
+
+/* move page to the right to make space for sidebar */
+.page{padding:100px 20px 40px;max-width:980px;margin:0 auto;margin-left:260px}
+
+@media (max-width:880px){
+  .sidebar{display:none}
+  .page{margin-left:0}
+}
+
+/* Toast */
+#toast{transition:transform 220ms ease,opacity 220ms ease}
+#toast.show{display:block;transform:translateY(0);opacity:1}
+#toast.hide{transform:translateY(8px);opacity:0}
+
+#toast button{background:transparent;border:1px solid rgba(255,255,255,0.18);color:#fff;padding:6px 8px;border-radius:6px;cursor:pointer}
+#toast button:hover{background:rgba(255,255,255,0.04)}
+
+/* Session notice (shown when day session is not active) */
+#sessionNotice{
+  color: #d97706; /* orange-600 */
+  font-weight:600;
+}
+
+/* Success popup used when day ends */
+.success-pill{
+  display:inline-flex;align-items:center;gap:8px;background:#ecfdf5;border:1px solid #bbf7d0;color:#065f46;padding:8px 12px;border-radius:999px;font-weight:600;box-shadow:0 8px 20px rgba(6,95,70,0.08)
+}
+.success-pill .check{background:#10b981;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+
+/* Countdown / day-status styling: make bolder and red for visibility */
+#dayStatus{
+  color: #dc2626; /* red-600 */
+  font-weight:700;
+  font-size:14px;
+}
+
+/* Urgent pulse animation for countdown when < 10 minutes */
+@keyframes pulseSoft {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(220,38,38,0.0); }
+  50% { transform: scale(1.02); box-shadow: 0 6px 18px rgba(220,38,38,0.08); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(220,38,38,0.0); }
+}
+#dayStatus.urgent{
+  animation: pulseSoft 1.2s ease-in-out infinite;
+}
